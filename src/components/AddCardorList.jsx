@@ -3,17 +3,21 @@ import {Collapse, alpha, makeStyles, Paper, Typography } from "@material-ui/core
 import AddCardorListText from './AddCardorListText';
 
 const AddCardorList = ({type}) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const classes = useStyle();
   return (
     <div className={classes.root}>
         <Collapse in={open}>
-          <AddCardorListText />
+          <AddCardorListText type={type}/>
         </Collapse>
         <Collapse in={!open}>
           <Paper className={classes.AddCardorListText}>
             <Typography>
-              + Add another card
+              {
+                type === "card" ? 
+                "+ Add a card" :
+                "+ Add another list"
+              }
             </Typography>
           </Paper>
         </Collapse>
