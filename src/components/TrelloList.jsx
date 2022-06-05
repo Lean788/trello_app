@@ -1,23 +1,35 @@
 import React from 'react'
-import {Paper, CssBaseline} from "@mui/material"
+import AddCardorList from './AddCardorList'
 import ListTitle from './ListTitle'
 import TrelloCard from './TrelloCard'
-import AddCardorList from './AddCardorList'
+import {Paper, CssBaseline, makeStyles} from "@material-ui/core";
+
+
+
 
 const TrelloList = () => {
+  const classes = useStyle();
   return (
     
-    <Paper>
-        <div>
+        <Paper className={classes.root}>
             <CssBaseline/>
             <ListTitle />
             <TrelloCard />
             <TrelloCard />
             <TrelloCard />
             <AddCardorList />
-        </div>
-    </Paper>
+        </Paper>
+    
   )
 }
+
+
+const useStyle = makeStyles(theme => ({
+  root: {
+    width: "300px",
+    background: "#ebecf0",
+    margin: theme.spacing(1)
+  }
+}))
 
 export default TrelloList

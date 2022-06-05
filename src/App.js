@@ -1,14 +1,14 @@
-import './App.css';
+import './styles/App.css';
 import TrelloList from './components/TrelloList';
 
+
+
 function App() {
+  
   return (
-    <div className="App">
-      <div className="Header">React Challenge: Trello app</div>
-    
-      <TrelloList />
-    
-    </div>
+      <>
+        <TrelloList />
+      </>
   );
 }
 
