@@ -3,7 +3,7 @@ import {Collapse, alpha, makeStyles, Paper, Typography } from "@material-ui/core
 import AddCardorListText from './AddCardorListText';
 
 const AddCardorList = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const classes = useStyle();
   return (
     <div className={classes.root}>
