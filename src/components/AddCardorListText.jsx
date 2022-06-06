@@ -5,14 +5,15 @@ import ClearIcon from "@material-ui/icons/Clear"
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 
-const AddCardorListText = ({type}) => {
+const AddCardorListText = ({type, setOpen}) => {
     const [title, setTitle] = useState("");
     const classes = useStyle();
     return (
         <>
             <Paper className={classes.card}>
                 <InputBase 
-                    value={title} 
+                    value={title}
+                    onBlur={()=>setOpen(false)} 
                     onChange={e=> setTitle(e.target.value)}
                     multiline
                     placeholder={
@@ -33,7 +34,7 @@ const AddCardorListText = ({type}) => {
                             "Add list"
                         }    
                     </Button>
-                    <IconButton>
+                    <IconButton onClick={()=>setOpen(false)}>
                         <ClearIcon/>
                     </IconButton>
                 </div>

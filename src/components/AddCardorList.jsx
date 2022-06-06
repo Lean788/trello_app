@@ -8,10 +8,13 @@ const AddCardorList = ({type}) => {
   return (
     <div className={classes.root}>
         <Collapse in={open}>
-          <AddCardorListText type={type}/>
+          <AddCardorListText type={type} setOpen={setOpen}/>
         </Collapse>
         <Collapse in={!open}>
-          <Paper className={classes.AddCardorListText}>
+          <Paper
+          onClick={()=>setOpen(true)} 
+          className={classes.AddCardorListText}
+          >
             <Typography>
               {
                 type === "card" ? 
