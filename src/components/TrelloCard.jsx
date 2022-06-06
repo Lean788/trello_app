@@ -1,13 +1,13 @@
 import { makeStyles, Paper } from '@material-ui/core';
 import React from 'react'
 
-const TrelloCard = () => {
+const TrelloCard = ({card}) => {
 
   const classes = useStyle();
 
   return (
     <Paper className={classes.trellocard}>
-        Card
+        {card.title}
     </Paper>
   )
 }

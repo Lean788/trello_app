@@ -7,15 +7,19 @@ import {Paper, CssBaseline, makeStyles} from "@material-ui/core";
 
 
 
-const TrelloList = () => {
+const TrelloList = ({list}) => {
+  // console.log(list);
   const classes = useStyle();
   return (
     
         <Paper className={classes.root}>
             <CssBaseline/>
             <ListTitle />
-            <TrelloCard />
-            <TrelloCard />
+            {
+              list.cards.map(card => (
+                <TrelloCard card={card} key={card.id}/>
+              ))
+            }
             <AddCardorList type="card"/>
         </Paper>
     
