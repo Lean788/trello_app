@@ -6,7 +6,7 @@ import background_image from "./images/aman-dhakal-YkWz_coLm84-unsplash.jpg";
 import AddCardorList from './components/AddCardorList';
 import mockData from "./mockdata.js";
 import ContextAPI from './ContextAPI';
-
+import uuid from "react-uuid";
 
 
 function App() {
@@ -19,15 +19,52 @@ function App() {
     list.title = updatedTitle;
     setData({
       ...data, 
-      list: {
-        ...data.list,
+      lists: {
+        ...data.lists,
         [listId] : list
       }
     })
   }
 
+  
+  const addCard = (title, listId) => {
+    // Id unico para cada Card.
+    const newCardId = uuid();
+    // Crear el card nuevo.
+    const newCard = {
+      id: newCardId,
+      title: title
+    }
+    // Añadir el newCard al array de cards que tiene la lista
+    const list = data.lists[listId]
+    list.cards = [...list.cards, newCard]
+    setData({
+      ...data,
+      lists: {
+        ...data.lists,
+        [listId] : list
+      }
+    })
+  };
+  const addList = (title, listId) => {
+    // Generar un id único para la lista nueva
+    const newListId = uuid()
+    
+    setData({
+        listIds : [...data.listIds, newListId],
+        lists : {
+          ...data.lists,
+          [newListId] : {
+            id: newListId,
+            title: title,
+            cards:[]
+          }
+        }
+      })
+    }
+  
   return (
-      <ContextAPI.Provider value={{updateListTitle}}>
+      <ContextAPI.Provider value={{updateListTitle, addCard, addList}}>
         <div className={classes.root}>
           <div className={classes.container}>
             {
@@ -67,4 +104,4 @@ const useStyle = makeStyles(theme => ({
 }));
 
 
-export default App;
+export default App
