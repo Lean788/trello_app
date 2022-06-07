@@ -7,7 +7,7 @@ import AddCardorList from './components/AddCardorList';
 import mockData from "./mockdata.js";
 import ContextAPI from './ContextAPI';
 import uuid from "react-uuid";
-
+import {DragDropContext, Droppable} from "react-beautiful-dnd";
 
 function App() {
   const classes = useStyle();
@@ -63,21 +63,50 @@ function App() {
       })
     }
   
+  // DnD
+    const onDragEnd = () => {
+
+    };
+
+
+
+
+
+
   return (
       <ContextAPI.Provider value={{updateListTitle, addCard, addList}}>
         <div className={classes.root}>
-          <div className={classes.container}>
-            {
-              data.listIds.map(listID =>{
-                const list = data.lists[listID]
-                return <TrelloList list={list} key={listID}/>
-                
-              })
-            }
-            <div>
-              <AddCardorList type="list"/>
-            </div>
-          </div>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable 
+              droppableId='1234' 
+              type="list" 
+              direction='Horizontal'
+              >
+                {
+                  (provided) => (
+                    <div 
+                    className={classes.container} 
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    >
+                      {
+                        data.listIds.map(listID =>{
+                          const list = data.lists[listID]
+                          return <TrelloList list={list} key={listID}/>
+                          
+                        })
+                      }
+                      <div>
+                          <AddCardorList type="list"/>
+                          {provided.placeholder}
+                      </div>
+                    </div>
+                  )
+                }
+            </Droppable>
+
+          </DragDropContext>
+
 
         </div>
 
