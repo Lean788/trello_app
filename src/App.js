@@ -64,7 +64,38 @@ function App() {
     }
   
   // DnD
-    const onDragEnd = () => {
+    const onDragEnd = (result) => {
+
+      const {destination, destination:{droppableId:destdroppableId, index: destIndex}, source, source: {droppableId:sourcedroppableId, index: sourceIndex}, type, draggableId} = result
+      console.table(result);
+      console.table([
+        {
+          sourcedroppableId,
+          destdroppableId,
+          draggableId
+        }
+      ]);
+      console.table([
+        {
+          type,
+          sourceIndex,
+          destIndex
+        }
+      ]);
+
+      if (destination === null) {
+        return;
+      }
+
+      if (type === "list") {
+        const newListIds = data.listIds
+        newListIds.splice(sourceIndex, 1)
+        newListIds.splice(destIndex, 0, draggableId)
+        return;
+      }
+
+
+
 
     };
 
