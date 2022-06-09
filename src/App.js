@@ -46,7 +46,7 @@ function App() {
       }
     })
   };
-  const addList = (title, listId) => {
+  const addList = (title) => {
     // Generar un id único para la lista nueva
     const newListId = uuid()
     
@@ -67,7 +67,10 @@ function App() {
     const onDragEnd = (result) => {
 
       const {destination, destination:{droppableId:destdroppableId, index: destIndex}, source, source: {droppableId:sourcedroppableId, index: sourceIndex}, type, draggableId} = result
+      // Control de datos:
       console.table(result);
+
+      // extracción de indicadores necesarios para sacar la lógica:
       console.table([
         {
           sourcedroppableId,
@@ -83,9 +86,14 @@ function App() {
         }
       ]);
 
-      if (destination === null) {
+      if (!destination) {
         return;
       }
+
+      if (destination.droppableId === source.droppableId &&
+                destination.index === source.index) {
+                  return;
+                }
 
       if (type === "list") {
         const newListIds = data.listIds
@@ -94,14 +102,50 @@ function App() {
         return;
       }
 
+      const start = data.lists[sourcedroppableId]
+      const finish = data.lists[destdroppableId]
+      const draggingCard = start.cards.filter((card) => card.id === draggableId)[0]
 
+      
+      if (start === finish) {
+        // splice para intercambiar los indices
+        start.cards.splice(sourceIndex, 1)
+        finish.cards.splice(destIndex, 0, draggingCard)
+        // actualizaremos setData con los nuevos indices
+        setData({
+          ...data,
+          list:{
+            ...data.lists,
+            [start.id] : finish
+          }
+        })
+      } else {
+        // start.cards.splice(sourceIndex, 1);
+        // finish.cards.splice(destIndex, 0, draggingCard)
+        const startCardIds = start.cards
+        startCardIds.splice(sourceIndex, 1)
+        const newStart = {
+          ...start, 
+          [start.cards.id] : startCardIds,
+        }
+        const finishCardIds = finish.cards
+        finishCardIds.splice(destIndex, 0, draggingCard);
+        const newFinish = {
+          ...finish,
+          [start.cards.id] : finishCardIds,
+        }
+        setData({
+          ...data,
+          lists:{
+            [newStart.id] : newStart,
+            [newFinish.id] : newFinish
+          }
+
+        })
+      }
 
 
     };
-
-
-
-
 
 
   return (
@@ -121,16 +165,15 @@ function App() {
                     {...provided.droppableProps}
                     >
                       {
-                        data.listIds.map(listID =>{
-                          const list = data.lists[listID]
-                          return <TrelloList list={list} key={listID}/>
-                          
+                        data.listIds.map((listID, index) =>{
+                        const list = data.lists[listID]
+                        return <TrelloList list={list} key={listID} index={index}/>
                         })
                       }
-                      <div>
-                          <AddCardorList type="list"/>
-                          {provided.placeholder}
-                      </div>
+                    <div>
+                      <AddCardorList type="list"/>
+                    </div>
+                      {provided.placeholder}
                     </div>
                   )
                 }

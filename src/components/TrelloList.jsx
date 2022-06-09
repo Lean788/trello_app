@@ -15,24 +15,25 @@ const TrelloList = ({list, index}) => {
         <Draggable 
         draggableId={list.id} 
         index={index}
-        > 
+        >        
           {
             (provided) => (
                         <div
                         ref={provided.innerRef} 
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        // {...provided.dragHandleProps}
                         >
                           <Paper 
                           className={classes.root} 
-                          // {...provided.dragHandleProps}
+                          {...provided.dragHandleProps}
                           >
                                 <CssBaseline/>
                                   <ListTitle title={list.title} listId={list.id}/>
-                                  <Droppable droppableId={list.id}>
+                                  <Droppable droppableId={list.id} key={list.id} type="card">
                                     {
                                       (provided) => (
                                         <div
+                                        className={classes.taskList}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
                                         >
@@ -66,6 +67,9 @@ const useStyle = makeStyles(theme => ({
     width: "300px",
     background: "#ebecf0",
     margin: theme.spacing(1)
+  },
+  taskList:{
+     
   }
 }));
 
