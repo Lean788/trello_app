@@ -8,6 +8,8 @@ import mockData from "./mockdata.js";
 import ContextAPI from './ContextAPI';
 import uuid from "react-uuid";
 import {DragDropContext, Droppable} from "react-beautiful-dnd";
+import NavBar from './components/NavBar';
+
 
 function App() {
   const classes = useStyle();
@@ -15,12 +17,12 @@ function App() {
 
 
   const updateListTitle = (updatedTitle, listId) => {
-    const list = data.lists[listId]
+    const list = data.tasks[listId]
     list.title = updatedTitle;
     setData({
       ...data, 
-      lists: {
-        ...data.lists,
+      tasks: {
+        ...data.tasks,
         [listId] : list
       }
     })
@@ -36,12 +38,12 @@ function App() {
       title: title
     }
     // Añadir el newCard al array de cards que tiene la lista
-    const list = data.lists[listId]
+    const list = data.tasks[listId]
     list.cards = [...list.cards, newCard]
     setData({
       ...data,
-      lists: {
-        ...data.lists,
+      tasks: {
+        ...data.tasks,
         [listId] : list
       }
     })
@@ -52,8 +54,8 @@ function App() {
     
     setData({
         listIds : [...data.listIds, newListId],
-        lists : {
-          ...data.lists,
+        tasks : {
+          ...data.tasks,
           [newListId] : {
             id: newListId,
             title: title,
@@ -62,7 +64,22 @@ function App() {
         }
       })
     }
-  
+
+    const removeCard = (index, card) => {
+      const results = Object.values(mockData.tasks);
+      const newCardsList = results[0].cards
+      // const newCardsList = list.cards
+      // Object.keys(mockData.lists).map(key => {console.log(key)});
+      const updatedCards = newCardsList.filter((card) => card.id === index);
+      updatedCards.splice(index, 1);
+      setData([...newCardsList])
+      // console.log(results[0].cards)
+      
+      // console.log(updatedCards);
+
+    }
+
+
   // DnD
     const onDragEnd = (result) => {
 
@@ -102,10 +119,10 @@ function App() {
         return;
       }
 
-      const start = data.lists[sourcedroppableId]
-      const finish = data.lists[destdroppableId]
+      const start = data.tasks[sourcedroppableId]
+      const finish = data.tasks[destdroppableId]
       const draggingCard = start.cards.filter((card) => card.id === draggableId)[0]
-
+      console.log(draggingCard);
       
       if (start === finish) {
         // splice para intercambiar los indices
@@ -115,13 +132,12 @@ function App() {
         setData({
           ...data,
           list:{
-            ...data.lists,
+            ...data.tasks,
             [start.id] : finish
           }
         })
       } else {
-        // start.cards.splice(sourceIndex, 1);
-        // finish.cards.splice(destIndex, 0, draggingCard)
+        
         const startCardIds = start.cards
         startCardIds.splice(sourceIndex, 1)
         const newStart = {
@@ -136,7 +152,7 @@ function App() {
         }
         setData({
           ...data,
-          lists:{
+          tasks:{
             [newStart.id] : newStart,
             [newFinish.id] : newFinish
           }
@@ -145,11 +161,15 @@ function App() {
       }
 
 
+
+
     };
 
 
   return (
-      <ContextAPI.Provider value={{updateListTitle, addCard, addList}}>
+      <ContextAPI.Provider value={{updateListTitle, addCard, addList, removeCard}}>
+        
+        <NavBar />
         <div className={classes.root}>
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable 
@@ -166,8 +186,8 @@ function App() {
                     >
                       {
                         data.listIds.map((listID, index) =>{
-                        const list = data.lists[listID]
-                        return <TrelloList list={list} key={listID} index={index}/>
+                        const list = data.tasks[listID]
+                        return <TrelloList className="trelloList" list={list} key={listID} index={index}/>
                         })
                       }
                     <div>
@@ -201,8 +221,11 @@ const useStyle = makeStyles(theme => ({
   },
   container: {
     display: "flex",
-    
+    minHeight: "100px",
   },
+  trelloList:{
+    flexGrow: 1,
+  }
   
 }));
 

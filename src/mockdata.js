@@ -1,7 +1,7 @@
 
 
 const mockData = {
-    lists: {
+    tasks: {
         "01list": {
             id: "01list",
             title: "To do",

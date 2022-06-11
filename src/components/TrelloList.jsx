@@ -65,11 +65,15 @@ const TrelloList = ({list, index}) => {
 const useStyle = makeStyles(theme => ({
   root: {
     width: "300px",
+    minHeight: "100px",
     background: "#ebecf0",
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column"
   },
   taskList:{
-     
+     flexGrow: 1,
+     minHeight: "75px"
   }
 }));
 
