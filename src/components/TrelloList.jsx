@@ -9,8 +9,8 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 
 const TrelloList = ({list, index}) => {
-  // console.log(list);
-    const classes = useStyle();
+
+  const classes = useStyle();
     return (
         <Draggable 
         draggableId={list.id} 
@@ -21,7 +21,6 @@ const TrelloList = ({list, index}) => {
                         <div
                         ref={provided.innerRef} 
                         {...provided.draggableProps}
-                        // {...provided.dragHandleProps}
                         >
                           <Paper 
                           className={classes.root} 

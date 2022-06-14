@@ -8,7 +8,7 @@ import mockData from "./mockdata.js";
 import ContextAPI from './ContextAPI';
 import uuid from "react-uuid";
 import {DragDropContext, Droppable} from "react-beautiful-dnd";
-import NavBar from './components/NavBar';
+import NavBar from './components/layout/NavBar';
 
 
 function App() {
@@ -17,12 +17,12 @@ function App() {
 
 
   const updateListTitle = (updatedTitle, listId) => {
-    const list = data.tasks[listId]
+    const list = data.lists[listId]
     list.title = updatedTitle;
     setData({
       ...data, 
-      tasks: {
-        ...data.tasks,
+      lists: {
+        ...data.lists,
         [listId] : list
       }
     })
@@ -38,12 +38,12 @@ function App() {
       title: title
     }
     // Añadir el newCard al array de cards que tiene la lista
-    const list = data.tasks[listId]
+    const list = data.lists[listId]
     list.cards = [...list.cards, newCard]
     setData({
       ...data,
-      tasks: {
-        ...data.tasks,
+      lists: {
+        ...data.lists,
         [listId] : list
       }
     })
@@ -54,8 +54,8 @@ function App() {
     
     setData({
         listIds : [...data.listIds, newListId],
-        tasks : {
-          ...data.tasks,
+        lists : {
+          ...data.lists,
           [newListId] : {
             id: newListId,
             title: title,
@@ -65,43 +65,41 @@ function App() {
       })
     }
 
-    const removeCard = (index, card) => {
-      const results = Object.values(mockData.tasks);
+    const removeCard = (card, index) => {
+      const results = Object.values(mockData.lists);
       const newCardsList = results[0].cards
-      // const newCardsList = list.cards
-      // Object.keys(mockData.lists).map(key => {console.log(key)});
-      const updatedCards = newCardsList.filter((card) => card.id === index);
+
+      console.log(card);
+      // arrFases = arrFases.filter(val => !fasewant.includes(val));
+      const updatedCards = newCardsList.filter(tarjeta => tarjeta === index);
       updatedCards.splice(index, 1);
-      setData([...newCardsList])
-      // console.log(results[0].cards)
-      
-      // console.log(updatedCards);
+      setData([...newCardsList])      
+      console.log(newCardsList);
 
     }
-
 
   // DnD
     const onDragEnd = (result) => {
 
       const {destination, destination:{droppableId:destdroppableId, index: destIndex}, source, source: {droppableId:sourcedroppableId, index: sourceIndex}, type, draggableId} = result
       // Control de datos:
-      console.table(result);
+      // console.table(result);
 
       // extracción de indicadores necesarios para sacar la lógica:
-      console.table([
-        {
-          sourcedroppableId,
-          destdroppableId,
-          draggableId
-        }
-      ]);
-      console.table([
-        {
-          type,
-          sourceIndex,
-          destIndex
-        }
-      ]);
+      // console.table([
+      //   {
+      //     sourcedroppableId,
+      //     destdroppableId,
+      //     draggableId
+      //   }
+      // ]);
+      // console.table([
+      //   {
+      //     type,
+      //     sourceIndex,
+      //     destIndex
+      //   }
+      // ]);
 
       if (!destination) {
         return;
@@ -119,8 +117,8 @@ function App() {
         return;
       }
 
-      const start = data.tasks[sourcedroppableId]
-      const finish = data.tasks[destdroppableId]
+      const start = data.lists[sourcedroppableId]
+      const finish = data.lists[destdroppableId]
       const draggingCard = start.cards.filter((card) => card.id === draggableId)[0]
       console.log(draggingCard);
       
@@ -132,7 +130,7 @@ function App() {
         setData({
           ...data,
           list:{
-            ...data.tasks,
+            ...data.lists,
             [start.id] : finish
           }
         })
@@ -152,17 +150,13 @@ function App() {
         }
         setData({
           ...data,
-          tasks:{
+          lists:{
             [newStart.id] : newStart,
             [newFinish.id] : newFinish
           }
 
         })
       }
-
-
-
-
     };
 
 
@@ -185,8 +179,8 @@ function App() {
                     {...provided.droppableProps}
                     >
                       {
-                        data.listIds.map((listID, index) =>{
-                        const list = data.tasks[listID]
+                        data?.listIds.map((listID, index) =>{
+                        const list = data.lists[listID]
                         return <TrelloList className="trelloList" list={list} key={listID} index={index}/>
                         })
                       }
